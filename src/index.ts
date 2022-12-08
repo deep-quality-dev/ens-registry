@@ -166,16 +166,14 @@ async function main() {
 
   const example = new ENSExample(network, provider);
 
-  // const name = 'stayhungry.eth';
-  // const duration = 31556952;
+  const name = 'stayhungry.eth';
+  const duration = 31556952;
 
-  // const secret = await example.commit(wallet, name);
-  // console.log('waiting 65000 miliseconds');
-  // await sleep(65000); // wait for 1 minute to prevent frontrunnning
-  // // const secret =
-  // // '0xd1ab4d465d20dd05028d2f63f09f4882ba92e362c3d40f16def64a1e227b06d3';
-  // await example.reveal(wallet, name, duration, secret);
-  // console.log(`Successfully registered ${name}`);
+  const secret = await example.commit(wallet, name);
+  console.log('waiting 65000 miliseconds');
+  await sleep(65000); // wait for 1 minute to prevent frontrunnning
+  await example.reveal(wallet, name, duration, secret);
+  console.log(`Successfully registered ${name}`);
 
   const resolveName = 'hungrywarrior.eth';
 
