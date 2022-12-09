@@ -16,6 +16,7 @@ export const Addresses = {
 export const Abis = {
   ETHRegistrarController: [
     'function makeCommitment(string memory name, address owner, bytes32 secret) pure public view returns(bytes32)',
+    'function makeCommitmentWithConfig(string memory name, address owner, bytes32 secret, address resolver, address addr) pure public view returns(bytes32)',
     'function commit(bytes32 commitment) public',
     'function register(string calldata name, address owner, uint duration, bytes32 secret) external payable',
     'function rentPrice(string memory name, uint duration) view public returns(uint)',

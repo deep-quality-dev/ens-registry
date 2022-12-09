@@ -55,15 +55,21 @@ class ENSExample {
       secret,
       label
     );
+    const owner = wallet.address;
 
-    const commitment = await controller.makeCommitment(
+    const commitment = await controller.makeCommitmentWithConfig(
       label,
-      wallet.address,
-      secret
+      owner,
+      secret,
+      resolverAddress,
+      owner
     );
     console.log('commitment', commitment);
 
-    const tx = await controller.commit(commitment);
+    const estimatedGas = await await controller.estimateGas.commit(commitment);
+    console.log('estimated gas for commit', estimatedGas.toString());
+
+    const tx = await controller.commit(commitment, {gasLimit: estimatedGas});
     await tx.wait();
     console.log('committed');
 
@@ -99,6 +105,21 @@ class ENSExample {
       ethers.utils.formatEther(rentPrice.toString())
     );
 
+    const estimatedGas = await controller.estimateGas.registerWithConfig(
+      label,
+      owner,
+      duration,
+      secret,
+      resolverAddress,
+      owner,
+      {
+        value: rentPrice,
+      }
+    );
+    console.log(
+      'estimated gas for registering with config',
+      estimatedGas.toString()
+    );
     const tx = await controller.registerWithConfig(
       label,
       owner,
@@ -166,7 +187,7 @@ async function main() {
 
   const example = new ENSExample(network, provider);
 
-  const name = 'stayhungry.eth';
+  const name = 'stayhungry.eth'; // 'hungrywarrior.eth';
   const duration = 31556952;
 
   const secret = await example.commit(wallet, name);
@@ -175,7 +196,7 @@ async function main() {
   await example.reveal(wallet, name, duration, secret);
   console.log(`Successfully registered ${name}`);
 
-  const resolveName = 'hungrywarrior.eth';
+  const resolveName = name;
 
   console.time('Resolve');
   // const address = await example.resolve(resolveName);
